@@ -1,3 +1,6 @@
+import { Injectable } from '@nestjs/common/decorators';
+
+@Injectable
 export class UserRepository {
   private users = [];
 
