@@ -14,6 +14,10 @@ export class UserService {
     ) { }
 
     async createUser(userData: CriaUsuarioDTO) {
+        const usuarioEntity = new UserEntity()
+
+        Object.assign(usuarioEntity, userData as UserEntity);
+
         const user = await this.userRepository.save({
             name: userData.name,
             email: userData.email,
@@ -22,7 +26,6 @@ export class UserService {
 
         return {
             message: 'User created successfully',
-            user: user
         }
     }
 
@@ -39,16 +42,16 @@ export class UserService {
     }
 
     async updateUser(id: string, userData: UpdateUserDTO) {
+        const usuarioEntity = new UserEntity()
+
         try {
-            const user = await this.userRepository.findOne({
-                where: {
-                    id
-                }
-            });
+            const user = await this.userRepository.findOneBy({ id })
 
             if (!user) {
                 throw new NotFoundException('User not found');
             }
+
+            Object.assign(usuarioEntity, userData as UserEntity);
 
             const updatedUser = await this.userRepository.update(id, {
                 name: userData.name,
@@ -66,17 +69,13 @@ export class UserService {
 
     async deleteUser(id: string) {
         try {
-            const user = await this.userRepository.findOne({
-                where: {
-                    id,
-                }
-            })
+            const user = await this.userRepository.findOneBy({ id })
 
             if (!user) {
                 throw new NotFoundException('User not found');
             }
 
-            const userDeleted = await this.userRepository.delete({
+            const userDeleted = await this.userRepository.softDelete({
                 id,
             });
 

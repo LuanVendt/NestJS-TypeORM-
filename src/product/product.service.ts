@@ -13,6 +13,10 @@ export class ProductService {
     ) { }
 
     async createProduct(productData: CriaProdutoDTO) {
+        const produtoEntity = new ProdutoEntity()
+
+        Object.assign(produtoEntity, productData as ProdutoEntity);
+
         await this.productRepository.save(productData);
 
         return {
@@ -31,15 +35,13 @@ export class ProductService {
 
     async updateProduct(id: string, productData: AtualizaProdutoDTO) {
         try {
-            const product = await this.productRepository.findOne({
-                where: {
-                    id
-                }
-            });
+            const product = await this.productRepository.findOneBy({ id })
 
             if (!product) {
                 throw new NotFoundException('Product not found');
             }
+
+            Object.assign(product, productData as ProdutoEntity);
 
             await this.productRepository.update(id, productData);
 
@@ -53,7 +55,7 @@ export class ProductService {
 
     async deleteProduct(id: string) {
         try {
-            await this.productRepository.delete(id);
+            await this.productRepository.softDelete(id);
 
             return {
                 message: "Product deleted successfully"
