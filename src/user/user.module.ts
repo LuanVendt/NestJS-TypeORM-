@@ -7,8 +7,9 @@ import { UserService } from './user.service';
 import { EmailIsUnicValidator } from './validacao/email-eh-unico.validator';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([UserEntity])],
-  controllers: [UserController],
-  providers: [UserService, UserRepository, EmailIsUnicValidator],
+    imports: [TypeOrmModule.forFeature([UserEntity])],
+    controllers: [UserController],
+    providers: [UserService, UserRepository, EmailIsUnicValidator],
+    exports: [UserService]
 })
 export class UserModule { }

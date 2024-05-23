@@ -41,6 +41,12 @@ export class UserService {
         };
     }
 
+    async getUserByEmail(email: string) {
+        const user = await this.userRepository.findOneBy({ email })
+
+        return user
+    }
+
     async updateUser(id: string, userData: UpdateUserDTO) {
         const usuarioEntity = new UserEntity()
 

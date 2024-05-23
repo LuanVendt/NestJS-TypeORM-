@@ -33,6 +33,16 @@ export class ProductService {
         }
     }
 
+    async getProductById(id: string) {
+        const product = await this.productRepository.findOneBy({ id })
+
+        if (!product) {
+            throw new NotFoundException('Product not found');
+        }
+
+        return product
+    }
+
     async updateProduct(id: string, productData: AtualizaProdutoDTO) {
         try {
             const product = await this.productRepository.findOneBy({ id })
